@@ -4,8 +4,7 @@ import backtrader as bt
 import backtrader.analyzers as btan
 import pandas as pd
 
-# import bt_strategy
-from bt_strategy.SMA import SMA
+from strategys import *
 
 if __name__ == '__main__':
 
@@ -13,7 +12,7 @@ if __name__ == '__main__':
     cerebro = bt.Cerebro()
 
     # 加载数据到模型中
-    dataname = 'history_data/BTCUSDT_1D.csv'
+    dataname = 'history_data/ETHUSDT_1H.csv'
     dataframe = pd.read_csv(dataname)
     dataframe['datetime'] = pd.to_datetime(dataframe['datetime'],
                                            unit="ms")  # 转换日期格式
@@ -32,14 +31,14 @@ if __name__ == '__main__':
     # cerebro.resampledata(data, timeframe=bt.TimeFrame.Days)
 
     # 构建策略
-    mystrategy = SMA
+    mystrategy = DEMA
     strats = cerebro.addstrategy(strategy=mystrategy)
 
     cerebro.addanalyzer(btan.SharpeRatio, _name="SharpeRatio")
     cerebro.addanalyzer(btan.DrawDown, _name='DrawDown')
 
     # 设定初始资金和佣金
-    cerebro.broker.setcash(1000.0)
+    cerebro.broker.setcash(10000.0)
     cerebro.broker.setcommission(0.0005)
     cerebro.addsizer(bt.sizers.PercentSizer, percents=50)
 
